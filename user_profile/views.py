@@ -3,12 +3,13 @@ from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
-from django.core.mail import send_mail
+import json
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
 
 from user_profile.serializers import ProfileSerializer
+from user_profile.models import User
 
 # Create your views here.
 @api_view(['POST',])
@@ -27,8 +28,8 @@ def register(request):
             data['name'] = user.name
             data['phone'] = user.phone
 
-            confirmation_Token = default_token_generator.make_token(user)
-            activate_link_url = 'http://127.0.0.1:3000' + '/verify/' + confirmation_Token
+            confirmation_Token = user.email_token
+            activate_link_url = 'http://127.0.0.1:3000' + '/email-verified/' + confirmation_Token
 
             subject='EMAIL CONFIRMATION'
             html_content=render_to_string('user_profile/email.html', {'verify_link': activate_link_url})
@@ -39,33 +40,33 @@ def register(request):
             msg=EmailMultiAlternatives(subject,text_content,email_from,recepient_list)
             msg.attach_alternative(html_content, "text/html")
             msg.send()
-            #send_mail(subject,message,email_from,recepient_list)
 
         else:
             data = serializer.errors
 
         return Response("Check your email for a confirmation link")
 
-# @api_view(['GET',])
-# @permission_classes((permissions.AllowAny,))
-# def activate(self, request, pk=None):
-#     data = json.loads(request.body.decode('utf-8'))
-#     token = data['token']
-#     res = {
-#         'status': 'success',
-#         'message': 'Valid',
-#     }
-    
-#     if GeneralUser.objects.filter(email_verified_hash=token, email_verified=0).exists():
-#         tokenExists = GeneralUser.objects.get(email_verified_hash=token, email_verified=0)
+@api_view(['POST',])
+@permission_classes((permissions.AllowAny,))
+def validate(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        verify_token = data['email_token']
+        res = {
+            'status': 'success',
+            'message': 'Valid',
+        }
+            
+        if User.objects.filter(email_token=verify_token).exists():
+            tokenExists = User.objects.get(email_token=verify_token)
 
-#         tokenExists.email_verified = 1
-#         tokenExists.save()
+            tokenExists.is_active = True
+            tokenExists.save()
 
-#     else:
-#         res = {
-#             'status': 'failed',
-#             'message': 'Invalid',
-#         }
-    
-#     return JsonResponse(res) 
+        else:
+            res = {
+                'status': 'failed',
+                'message': 'Invalid',
+            }
+                
+        return Response(res) 
