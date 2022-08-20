@@ -45,9 +45,12 @@ INSTALLED_APPS = [
     'orders',
     'user_profile',
     'rest_framework',
+    'corsheaders',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -148,5 +151,14 @@ AUTH_USER_MODEL = 'user_profile.User'
 
 #Email verification API keys
 
-SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
-FROM_EMAIL = os.environ.get('FROM_EMAIL')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'mbuguag026@gmail.com'
+EMAIL_HOST_PASSWORD = 'dglxumtqosmiakqn'
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000'
+]
