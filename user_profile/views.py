@@ -1,5 +1,8 @@
+from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import permissions
+from rest_framework import permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
@@ -70,3 +73,18 @@ def validate(request):
             }
                 
         return Response(res) 
+
+@permission_classes((permissions.AllowAny,))
+class LoginView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        user = authenticate(email=email, passsword=password)
+        serializer = ProfileSerializer(user)
+
+        if user:
+            Token.objects.get_or_create(user=user)
+            return Response({"token": user.auth_token.key, "user": serializer.data})
+        else:
+            return Response({"error": "Wrong credentials"}, status = status.HTTP_400_BAD_REQUEST)
