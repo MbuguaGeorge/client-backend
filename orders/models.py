@@ -1,7 +1,5 @@
-from tabnanny import verbose
 from django.db import models
-
-# Create your models here.
+from user_profile.models import User
 
 #Academic writing options
 
@@ -20,13 +18,12 @@ PAPER_LEVEL = [
 #Academic writing models
 
 class Academic_Writing(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     order_type = models.CharField(choices=ORDER_TYPE, default="Academic Writing", max_length=200)
     academic_year = models.CharField(max_length=200)
     deadline = models.DateTimeField(null=True, blank=True)
     paper_level = models.CharField(choices=PAPER_LEVEL, default="Standard", max_length=200)
     upgrade = models.CharField(max_length=200, null=True)
-    # details = models.ForeignKey(Academic_Writing_Detail, on_delete=models.CASCADE, null=True, blank=True)
-    # requirements = models.ForeignKey(Academic_Writing_Requirement, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Academic_Writing'

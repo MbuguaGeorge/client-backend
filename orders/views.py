@@ -1,12 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from orders.models import Academic_Writing
-from rest_framework import permissions
 from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
 from orders.serializers import SummarySerializer, DetailSerializer, RequirementSerializer
 
 # Create your views here.
-@permission_classes((permissions.AllowAny,))
+@permission_classes((IsAuthenticated,))
 class SummaryList(APIView):
     def post(self, request):
         detail_serializer = DetailSerializer(data=request.data)
@@ -36,6 +35,7 @@ class SummaryList(APIView):
 
         if summary_serializer.is_valid():
             summary = summary_serializer.save()
+            summary.user = request.user
             summary.save()
             data['order_type'] = summary.order_type
             data['academic_year'] = summary.academic_year

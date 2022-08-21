@@ -80,11 +80,11 @@ class LoginView(APIView):
         email = request.data.get('email')
         password = request.data.get('password')
 
-        user = authenticate(email=email, passsword=password)
+        user = authenticate(email=email, password=password)
         serializer = ProfileSerializer(user)
 
         if user:
-            Token.objects.get_or_create(user=user)
+            token = Token.objects.get_or_create(user=user)
             return Response({"token": user.auth_token.key, "user": serializer.data})
         else:
             return Response({"error": "Wrong credentials"}, status = status.HTTP_400_BAD_REQUEST)
