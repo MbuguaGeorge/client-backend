@@ -21,9 +21,10 @@ class Academic_Writing(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     order_type = models.CharField(choices=ORDER_TYPE, default="Academic Writing", max_length=200)
     academic_year = models.CharField(max_length=200)
-    deadline = models.DateTimeField(null=True, blank=True)
+    deadline = models.CharField(max_length=200, null=True, blank=True)
     paper_level = models.CharField(choices=PAPER_LEVEL, default="Standard", max_length=200)
-    upgrade = models.CharField(max_length=200, null=True)
+    title = models.CharField(max_length=200, null=True, blank=True)
+    upgrade = models.CharField(max_length=200, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Academic_Writing'
@@ -34,9 +35,11 @@ class Academic_Writing(models.Model):
 
 class Academic_Writing_Detail(models.Model):
     order_type = models.ForeignKey(Academic_Writing, on_delete=models.CASCADE, null=True, blank=True)
-    paper_type = models.CharField(max_length=200)
-    subject = models.CharField(max_length=200)
-    pages = models.CharField(max_length=200)
+    paper_type = models.CharField(max_length=200, null=True, blank=True)
+    subject = models.CharField(max_length=200, null=True, blank=True)
+    pages = models.IntegerField(default=0, null=True, blank=True)
+    charts = models.IntegerField(default=0, null=True, blank=True)
+    slides = models.IntegerField(default=0, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Academic_Writing_Detail'
@@ -47,10 +50,10 @@ class Academic_Writing_Detail(models.Model):
 
 class Academic_Writing_Requirement(models.Model):
     order_type = models.ForeignKey(Academic_Writing, on_delete=models.CASCADE, null=True, blank=True)
-    instructions = models.TextField()
+    instructions = models.TextField(null=True, blank=True)
     instruction_file = models.FileField(null=True, blank=True)
-    paper_format = models.CharField(max_length=200)
-    references = models.IntegerField(default=1)
+    paper_format = models.CharField(max_length=200, null=True, blank=True)
+    references = models.IntegerField(default=0, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Academic_Writing_Requirement'

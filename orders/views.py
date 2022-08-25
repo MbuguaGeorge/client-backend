@@ -21,6 +21,8 @@ class SummaryList(APIView):
             data1['paper_type'] = detail.paper_type
             data1['subject'] = detail.subject
             data1['pages'] = detail.pages
+            data1['charts'] = detail.charts
+            data1['slides'] = detail.slides
         else:
             data1 = detail_serializer.errors
 

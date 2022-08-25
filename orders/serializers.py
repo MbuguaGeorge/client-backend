@@ -4,13 +4,15 @@ from orders.models import Academic_Writing, Academic_Writing_Detail, Academic_Wr
 class DetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Academic_Writing_Detail
-        fields = ('paper_type', 'subject', 'pages')
+        fields = ('paper_type', 'subject', 'pages', 'charts', 'slides')
 
     def save(self):
         detail = Academic_Writing_Detail (
             paper_type = self.validated_data['paper_type'],
             subject = self.validated_data['subject'],
             pages = self.validated_data['pages'],
+            charts = self.validated_data['charts'],
+            slides = self.validated_data['slides'],
         )
         return detail
 
