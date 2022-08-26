@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.staticfiles.urls import static
 
 urlpatterns = [
-    path('summary', views.SummaryList.as_view()),
+    path('summary', views.order, name=('summary')),
 ]
 
 if settings.DEBUG:

@@ -1,51 +1,40 @@
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import permission_classes
+from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import IsAuthenticated
-from orders.serializers import SummarySerializer, DetailSerializer, RequirementSerializer
+from orders.serializers import SummarySerializer
+from orders.models import Academic_Writing
 
 # Create your views here.
+@api_view(['POST',])
 @permission_classes((IsAuthenticated,))
-class SummaryList(APIView):
-    def post(self, request):
-        detail_serializer = DetailSerializer(data=request.data)
-        summary_serializer = SummarySerializer(data=request.data)
-        requirement_serializer = RequirementSerializer(data=request.data)
+def order(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            serializer = SummarySerializer(data=request.data)
+            data = {}
 
-        data = {}
-        data1 = {}
-        data2 = {}
+            if serializer.is_valid():
+                order = serializer.save()
+                order.user = request.user
+                order.save()
+                data['response'] = 'success'
+                data['order_type'] = order.order_type
+                data['academic_year'] = order.academic_year
+                data['deadline'] = order.deadline
+                data['paper_level'] = order.paper_level
+                data['title'] = order.title
+                data['upgrade'] = order.upgrade
+                data['paper_type'] = order.paper_type
+                data['subject'] = order.subject
+                data['pages'] = order.pages
+                data['charts'] = order.charts
+                data['slides'] = order.slides
+                data['instructions'] = order.instructions
+                # data['instruction_file'] = order.instruction_file
+                data['paper_format'] = order.paper_format
+                data['references'] = order.references
 
-        if detail_serializer.is_valid():
-            detail = detail_serializer.save()
-            data1['paper_type'] = detail.paper_type
-            data1['subject'] = detail.subject
-            data1['pages'] = detail.pages
-            data1['charts'] = detail.charts
-            data1['slides'] = detail.slides
-        else:
-            data1 = detail_serializer.errors
+            else:
+                data = serializer.errors
 
-        if requirement_serializer.is_valid():
-            requirement = requirement_serializer.save()
-            data2['instructions'] = requirement.instructions
-            data2['instruction_file'] = requirement.instruction_file
-            data2['paper_format'] = requirement.paper_format
-            data2['references'] = requirement.references
-        else:
-            data2 = requirement_serializer.errors
-
-        if summary_serializer.is_valid():
-            summary = summary_serializer.save()
-            summary.user = request.user
-            summary.save()
-            data['order_type'] = summary.order_type
-            data['academic_year'] = summary.academic_year
-            data['deadline'] = summary.deadline
-            data['paper_level'] = summary.paper_level
-            data['upgrade'] = summary.upgrade
-            data['title'] = summary.title
-        else:
-            data = summary_serializer.errors
-
-        return Response(data)
+            return Response(data)
