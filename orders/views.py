@@ -44,6 +44,7 @@ class SummaryList(APIView):
             data['deadline'] = summary.deadline
             data['paper_level'] = summary.paper_level
             data['upgrade'] = summary.upgrade
+            data['title'] = summary.title
         else:
             data = summary_serializer.errors
 
