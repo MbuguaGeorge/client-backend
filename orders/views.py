@@ -3,6 +3,7 @@ from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import IsAuthenticated
 from orders.serializers import SummarySerializer
 from orders.models import Academic_Writing
+from dashboard.serializers import OrderSerialzer
 
 # Create your views here.
 @api_view(['POST',])
