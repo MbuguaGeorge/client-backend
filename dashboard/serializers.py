@@ -5,18 +5,15 @@ from orders.serializers import SummarySerializer
 class OrderSerialzer(serializers.ModelSerializer):
     class Meta:
         model = Recent_Orders
-        fields = ('details', 'status')
+        fields = ('status',)
 
-    def save(self):
-        order = Recent_Orders(
-            status = self.validated_data['status']
-        )
-
-        order.save()
-        return order
+    def update(self, instance, validated_data):
+        instance.status = validated_data.get('status', instance.status)
+        instance.save()
+        return instance
 
 class ListOrdersSerializer(serializers.ModelSerializer):
     details = SummarySerializer(read_only=True)
     class Meta:
         model = Recent_Orders
-        fields = ('details', 'status')
+        fields = ('id', 'details', 'status')

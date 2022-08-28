@@ -1,34 +1,34 @@
+from asyncio import streams
+from operator import imod
 from dashboard.serializers import OrderSerialzer, ListOrdersSerializer
 from rest_framework.response import Response
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import IsAuthenticated
+import io
+from rest_framework.parsers import JSONParser
 
 from orders.models import Academic_Writing
 from dashboard.models import Recent_Orders
 from orders.serializers import SummarySerializer
 
 # Create your views here.
-@api_view(['POST'])
+@api_view(['PUT',])
 @permission_classes((IsAuthenticated,))
-def recent_orders(request):
+def updatestatus(request, pk):
     if request.user.is_authenticated:
-        cur_user = request.user
-        if request.method == 'POST':
-            order_details = Academic_Writing.objects.get(user=request.user)
-            serializer = OrderSerialzer(data=request.data)
-            data = {}
-
-            if serializer.is_valid():
-                order = serializer.save()
-                order.details = order_details
-                order.details = Academic_Writing.objects.filter(user=cur_user)
-                order.save()
-                data['response'] = 'success'
-                data['status'] = order.status
-            else:
-                data = serializer.errors
-            return Response(data)
+        if request.method == 'PUT':
+            json_data = request.body
+            stream = io.BytesIO(json_data)
+            st_data = JSONParser().parse(stream)
+            status = st_data.get('status', None)
+            if status is not None:
+                order = Recent_Orders.objects.get(id=pk)
+                serializer = OrderSerialzer(order, data=st_data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response({'message': 'status successfully updated'})
+                return Response({'message': 'data not valid'})
 
 class Order(generics.ListAPIView):
     permission_classes = [IsAuthenticated]

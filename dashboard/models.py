@@ -17,8 +17,8 @@ class Recent_Orders(models.Model):
         verbose_name = 'Recent_Order'
         verbose_name_plural = 'Recent_Orders'
 
-    def __str__(self):
-        return self.details.order_type
+    def __int__(self):
+        return self.id
 
 def create_order(sender, instance, created, **kwargs):
     if created:
