@@ -1,5 +1,3 @@
-from asyncio import streams
-from operator import imod
 from dashboard.serializers import OrderSerialzer, ListOrdersSerializer
 from rest_framework.response import Response
 from rest_framework import generics, permissions
@@ -10,7 +8,6 @@ from rest_framework.parsers import JSONParser
 
 from orders.models import Academic_Writing
 from dashboard.models import Recent_Orders
-from orders.serializers import SummarySerializer
 
 # Create your views here.
 @api_view(['PUT',])
@@ -29,6 +26,18 @@ def updatestatus(request, pk):
                     serializer.save()
                     return Response({'message': 'status successfully updated'})
                 return Response({'message': 'data not valid'})
+
+class OrderView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'pk'
+
+    def get(self, request, pk):
+        res = []
+        order = Recent_Orders.objects.get(id=pk)
+        serializer = ListOrdersSerializer(order)
+        data = serializer.data
+        res.append(data)
+        return Response(res)
 
 class Order(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
