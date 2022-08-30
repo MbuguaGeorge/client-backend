@@ -12,6 +12,10 @@ STATUS = [
 class Recent_Orders(models.Model):
     details = models.ForeignKey(Academic_Writing, on_delete=models.CASCADE, null=True)
     status = models.CharField(choices=STATUS, default="Recent", max_length=200, blank=True, null=True)
+    amount = models.FloatField(null=True, blank=True, default=0.00)
+    complete = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Recent_Order'
