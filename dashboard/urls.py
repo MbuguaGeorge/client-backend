@@ -6,4 +6,5 @@ urlpatterns = [
     path('list', views.RecentOrder.as_view()),
     path('recent/<int:pk>', views.OrderView.as_view()),
     path('canceled/', views.CanceledOrder.as_view()),
+    path('neworder/<str:pk>', views.NewOrder.as_view()),
 ]

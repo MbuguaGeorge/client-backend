@@ -12,16 +12,6 @@ class OrderSerialzer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-class AmountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Recent_Orders
-        fieds = ('amount',)
-        
-    def update(self, instance, validated_data):
-        instance.amount = validated_data.get('amount', instance.amount)
-        instance.save()
-        return instance
-
 class ListOrdersSerializer(serializers.ModelSerializer):
     details = SummarySerializer(read_only=True)
     class Meta:

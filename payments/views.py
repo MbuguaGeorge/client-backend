@@ -34,8 +34,7 @@ class PaymentProcessView(views.APIView):
                     month = expiry[:2]
                     year = expiry[-4:]
                     total_amount = float(amount)
-                    reference = Recent_Orders.objects.get(details__id=ref)
-                    print(reference.id)
+                    pk = int(ref)
 
                     api = CheckoutSdk.builder().secret_key('sk_sbox_swezsqazkhbmskkhm2vawdjt7yc').environment(Environment.sandbox()).build()
                     
@@ -55,12 +54,15 @@ class PaymentProcessView(views.APIView):
                     request.currency = Currency.USD
                     request.amount = total_amount
                     request.capture = False
-                    request.reference = reference.id
+                    request.reference = ref
                     request.customer = customer_request
                     request.processing_channel_id = "pc_vweppgh5z4befjkufgnowprvm4"
 
                     try:
                         response = api.payments.request_payment(request)
+                        order = Recent_Orders.objects.get(id=pk)
+                        order.complete = True
+                        order.save
                         return Response({'success': 'Payment sent Successfully'})
                     except CheckoutApiException:
                         return Response({

@@ -1,10 +1,7 @@
 from rest_framework.response import Response
-from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import IsAuthenticated
 from orders.serializers import SummarySerializer
 from rest_framework.views import APIView
-from dashboard.models import Recent_Orders
-from dashboard.serializers import ListOrdersSerializer
 
 # Create your views here.
 class CreateOrderList(APIView):
@@ -36,8 +33,16 @@ class CreateOrderList(APIView):
                     # data['instruction_file'] = order.instruction_file
                     data['paper_format'] = order.paper_format
                     data['references'] = order.references
+                    data['programming_category'] = order.programming_category
+                    data['prog_language'] = order.prog_language
+                    data['task_size'] = order.task_size
+                    data['amount'] = order.amount
+                    data['discipline'] = order.discipline
+                    data['software'] = order.software
+
+                    serializer1 = SummarySerializer(order)
+                    return Response(serializer1.data)
 
                 else:
                     data = serializer.errors
-
-                return Response(data)
+                    return Response({'Invalid': data})
