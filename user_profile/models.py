@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-from django.conf import settings
+from django.db.models.signals import post_save
+from rest_framework.authtoken.models import Token
 
 # Create your models here.
 class CustomUserManager(BaseUserManager):
@@ -51,3 +52,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
+
+def create_order(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
+        print('token generated')
+
+post_save.connect(create_order, sender=User)

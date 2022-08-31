@@ -39,24 +39,26 @@ class OrderView(generics.ListAPIView):
         res.append(data)
         return Response(res)
 
-class Order(generics.ListAPIView):
+class RecentOrder(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     lookup_field = 'pk'
 
     def get(self, request):
-        res = []
-        summary = Academic_Writing.objects.filter(user=request.user)
-        recent_orders = Recent_Orders.objects.filter(details__user=request.user)
+        res = [] 
+        recent_orders = Recent_Orders.objects.filter(details__user=request.user, status='Recent')
         for order in recent_orders:
             serializer = ListOrdersSerializer(order)
             res.append(serializer.data)
         return Response(res)
 
-class Newly_Created_Order(generics.ListAPIView):
+class CanceledOrder(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     lookup_field = 'pk'
 
-    def get(self, request, pk):
-        order = Recent_Orders.objects.get(details__id=pk)
-        serializer = ListOrdersSerializer(order)
-        return Response(serializer.data)
+    def get(self, request):
+        res = []
+        recent_orders = Recent_Orders.objects.filter(details__user=request.user, status='Canceled')
+        for order in recent_orders:
+            serializer = ListOrdersSerializer(order)
+            res.append(serializer.data)
+        return Response(res)

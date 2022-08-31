@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
 from rest_framework.decorators import api_view, permission_classes
-from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
 import json
 from django.template.loader import render_to_string
@@ -44,10 +43,12 @@ def register(request):
             msg.attach_alternative(html_content, "text/html")
             msg.send()
 
+            return Response({"success":"an email confirmation link was sent to you"})
+
         else:
             data = serializer.errors
+            return Response({'Invalid': data})
 
-        return Response("Check your email for a confirmation link")
 
 @api_view(['POST',])
 @permission_classes((permissions.AllowAny,))
