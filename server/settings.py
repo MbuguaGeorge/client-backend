@@ -139,6 +139,12 @@ REST_FRAMEWORK = {
     ]
 }
 
+# Validate inactive user
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',
+]
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
