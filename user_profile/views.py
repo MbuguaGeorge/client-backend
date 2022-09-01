@@ -31,7 +31,7 @@ def register(request):
             data['phone'] = user.phone
 
             confirmation_Token = user.email_token
-            activate_link_url = 'http://127.0.0.1:3000' + '/email-verified/' + confirmation_Token
+            activate_link_url = 'https://georgeclientapp.netlify.app' + '/email-verified/' + confirmation_Token
 
             subject='EMAIL CONFIRMATION'
             html_content=render_to_string('user_profile/email.html', {'verify_link': activate_link_url})
