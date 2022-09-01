@@ -14,6 +14,7 @@ from pathlib import Path
 import environ
 import os
 import django_heroku
+import dj_database_url
 
 env = environ.Env()
 environ.Env.read_env('.env')
@@ -104,6 +105,9 @@ DATABASES = {
         'PORT':'5432',
     }
 }
+
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation
