@@ -63,10 +63,14 @@ class PaymentProcessView(views.APIView):
                         order = Recent_Orders.objects.get(id=pk)
                         order.complete = True
                         order.save
-                        return Response({'success': 'Payment sent Successfully'})
+                        return Response({
+                            'status': 'success',
+                            'message' : 'Payment sent Successfully'
+                        })
                     except CheckoutApiException:
                         return Response({
-                            'Failed': 'Payment was not a success',
+                            'status': 'failed',
+                            'message' : 'Invalid card details'
                         })
 # card details example
 # 4543474002249996
