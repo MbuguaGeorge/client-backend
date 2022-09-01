@@ -23,7 +23,7 @@ class Academic_Writing(models.Model):
     paper_format = models.CharField(max_length=200, null=True, blank=True)
     references = models.IntegerField(default=0, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    amount = models.CharField(max_length=5, null=True, blank=True)
+    amount = models.CharField(max_length=200, null=True, blank=True)
     prog_language = models.CharField(max_length=200, null=True, blank=True)
     programming_category = models.CharField(max_length=200, null=True, blank=True)
     task_size = models.CharField(max_length=200, null=True, blank=True)
