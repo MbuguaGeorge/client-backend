@@ -63,6 +63,18 @@ class CanceledOrder(generics.ListAPIView):
             res.append(serializer.data)
         return Response(res)
 
+class FinishedOrder(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'pk'
+
+    def get(self, request):
+        res = []
+        recent_orders = Recent_Orders.objects.filter(details__user=request.user, status='Finished')
+        for order in recent_orders:
+            serializer = ListOrdersSerializer(order)
+            res.append(serializer.data)
+        return Response(res)
+
 class NewOrder(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     lookup_field = 'pk'

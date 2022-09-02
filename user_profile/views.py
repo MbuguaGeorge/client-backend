@@ -1,16 +1,18 @@
+from functools import partial
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import permissions, status
+from rest_framework import permissions, status, generics
 from rest_framework.decorators import api_view, permission_classes
 from django.conf import settings
+from rest_framework.permissions import IsAuthenticated
 import json
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
 
-from user_profile.serializers import ProfileSerializer
+from user_profile.serializers import ProfileSerializer, ProfileUpdateSerializer
 from user_profile.models import User
 
 # Create your views here.
@@ -89,3 +91,27 @@ class LoginView(APIView):
             return Response({"token": user.auth_token.key, "user": serializer.data})
         else:
             return Response({"error": "Wrong credentials"}, status = status.HTTP_400_BAD_REQUEST)
+
+class CurUser(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'pk'
+
+    def get(self, request):
+        res = []
+        serializer = ProfileSerializer(request.user)
+        res.append(serializer.data)
+        return Response(res)
+
+class UpdateUser(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, format=None):
+        res = []
+        serializer = ProfileUpdateSerializer(request.user, data=request.data, partial=True)
+        data = {}
+        if serializer.is_valid():
+            serializer.save()
+            res.append(serializer.data)
+            data['success'] = "updated successfully"
+            return Response(res)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

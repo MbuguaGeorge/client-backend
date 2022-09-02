@@ -5,4 +5,6 @@ urlpatterns = [
     path('register', views.register, name=('register')),
     path('validate', views.validate, name=('validate')),
     path('login', views.LoginView.as_view()),
+    path('cur', views.CurUser.as_view()),
+    path('update', views.UpdateUser.as_view()),
 ]
