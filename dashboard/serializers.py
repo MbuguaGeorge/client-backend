@@ -16,4 +16,4 @@ class ListOrdersSerializer(serializers.ModelSerializer):
     details = SummarySerializer(read_only=True)
     class Meta:
         model = Recent_Orders
-        fields = ('id', 'details', 'status')
+        fields = ('id', 'details', 'status', 'complete')

@@ -71,3 +71,15 @@ class NewOrder(generics.ListAPIView):
         order = Recent_Orders.objects.get(details__user=request.user, details__id=pk)
         serializer = ListOrdersSerializer(order)
         return Response(serializer.data)
+
+class RecentOrderView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'pk'
+
+    def get(self, request, pk):
+        res = []
+        order = Recent_Orders.objects.get(details__user=request.user, status='Recent', id=pk)
+        serializer = ListOrdersSerializer(order)
+        data = serializer.data
+        res.append(data)
+        return Response(res)

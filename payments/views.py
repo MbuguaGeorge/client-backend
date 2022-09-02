@@ -1,6 +1,7 @@
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework import views
+from dashboard.serializers import ListOrdersSerializer
 from dashboard.models import Recent_Orders
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import JSONParser
@@ -61,8 +62,10 @@ class PaymentProcessView(views.APIView):
                     try:
                         response = api.payments.request_payment(request)
                         order = Recent_Orders.objects.get(id=pk)
+                        # serializer = ListOrdersSerializer(data=request.data)
+                        # order1 = serializer.save
                         order.complete = True
-                        order.save
+                        order.save()
                         return Response({
                             'status': 'success',
                             'message' : 'Payment sent Successfully'
