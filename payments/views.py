@@ -1,7 +1,5 @@
-from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework import views
-from dashboard.serializers import ListOrdersSerializer
 from dashboard.models import Recent_Orders
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import JSONParser
@@ -10,7 +8,7 @@ import io
 from checkout_sdk.checkout_sdk import CheckoutSdk
 from checkout_sdk.environment import Environment
 from checkout_sdk.payments.payments import PaymentRequestCardSource, PaymentRequest, CustomerRequest
-from checkout_sdk.exception import CheckoutApiException, CheckoutArgumentException, CheckoutAuthorizationException
+from checkout_sdk.exception import CheckoutApiException
 from checkout_sdk.common.enums import Currency
 
 # Create your views here.
@@ -62,8 +60,6 @@ class PaymentProcessView(views.APIView):
                     try:
                         response = api.payments.request_payment(request)
                         order = Recent_Orders.objects.get(id=pk)
-                        # serializer = ListOrdersSerializer(data=request.data)
-                        # order1 = serializer.save
                         order.complete = True
                         order.save()
                         return Response({
@@ -75,8 +71,3 @@ class PaymentProcessView(views.APIView):
                             'status': 'failed',
                             'message' : 'Invalid card details'
                         })
-# card details example
-# 4543474002249996
-# 956
-# 6
-# 2025

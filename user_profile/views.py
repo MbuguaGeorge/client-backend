@@ -66,7 +66,7 @@ def validate(request):
         if User.objects.filter(email_token=verify_token).exists():
             tokenExists = User.objects.get(email_token=verify_token)
 
-            tokenExists.is_active = True
+            tokenExists.is_active = True 
             tokenExists.save()
 
         else:
