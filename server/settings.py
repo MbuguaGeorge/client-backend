@@ -30,14 +30,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1-%d$t9r$e#$6su$nwdea_vxo!lfwx5ucintm$b(audjebcf$9'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'georgeclientapp.herokuapp.com',
-    '127.0.0.1'
+    '127.0.0.1:8000'
 ]
 
 
@@ -181,8 +181,12 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'mbuguag026@gmail.com'
-EMAIL_HOST_PASSWORD = 'dglxumtqosmiakqn'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+
+# Checkout.com API keys
+CHECKOUT_API_KEY = env('CHECKOUT_API_KEY')
+CHECKOUT_CHANNEL_ID = env('CHECKOUT_CHANNEL_ID')
 
 CORS_ORIGIN_ALLOW_ALL = True
 

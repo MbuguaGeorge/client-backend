@@ -3,6 +3,7 @@ from rest_framework import views
 from dashboard.models import Recent_Orders
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import JSONParser
+from django.conf import settings
 import io
 
 from checkout_sdk.checkout_sdk import CheckoutSdk
@@ -35,7 +36,7 @@ class PaymentProcessView(views.APIView):
                     total_amount = float(amount)
                     pk = int(ref)
 
-                    api = CheckoutSdk.builder().secret_key('sk_sbox_swezsqazkhbmskkhm2vawdjt7yc').environment(Environment.sandbox()).build()
+                    api = CheckoutSdk.builder().secret_key(settings.CHECKOUT_API_KEY).environment(Environment.sandbox()).build()
                     
                     request_card_source = PaymentRequestCardSource()
                     request_card_source.type = 'card'
@@ -55,7 +56,7 @@ class PaymentProcessView(views.APIView):
                     request.capture = False
                     request.reference = ref
                     request.customer = customer_request
-                    request.processing_channel_id = "pc_vweppgh5z4befjkufgnowprvm4"
+                    request.processing_channel_id = settings.CHECKOUT_CHANNEL_ID
 
                     try:
                         response = api.payments.request_payment(request)
