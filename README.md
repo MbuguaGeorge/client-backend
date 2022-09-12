@@ -1,6 +1,6 @@
 ## API Endpoints
 
-To test the following endpoints use **Postman** or **CURL**
+To test the following endpoints use **Postman** or **CURL**  
 Pass form data as key-value pairs in body. Auth credentials to be passed in header as: `Auhorization: Token <access_token>`
 
 - **POST** `/profile/register`
