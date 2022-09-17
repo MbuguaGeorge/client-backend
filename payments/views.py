@@ -38,6 +38,7 @@ class PaymentProcessView(views.APIView):
 
                     api = CheckoutSdk.builder().secret_key(settings.CHECKOUT_API_KEY).environment(Environment.sandbox()).build()
                     
+                    # Card details
                     request_card_source = PaymentRequestCardSource()
                     request_card_source.type = 'card'
                     request_card_source.number = card_no
@@ -45,10 +46,12 @@ class PaymentProcessView(views.APIView):
                     request_card_source.expiry_year = int(year)
                     request_card_source.cvv = card_cvv
 
+                    # Customer details
                     customer_request = CustomerRequest()
                     customer_request.email = email
                     customer_request.name = name
 
+                    # Payment details
                     request = PaymentRequest()
                     request.source = request_card_source
                     request.currency = Currency.USD
@@ -60,8 +63,8 @@ class PaymentProcessView(views.APIView):
 
                     try:
                         response = api.payments.request_payment(request)
-                        order = Recent_Orders.objects.get(id=pk)
-                        order.complete = True
+                        order = Recent_Orders.objects.get(id=pk) # Set order payment complete
+                        order.complete = True 
                         order.save()
                         return Response({
                             'status': 'success',
