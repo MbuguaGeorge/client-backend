@@ -31,8 +31,8 @@ class PaymentProcessView(views.APIView):
                 ref = st_data.get('ref', None)
 
                 if card_no is not None and card_cvv is not None and expiry is not None and amount is not None and name is not None and email is not None:
-                    month = expiry[:2]
-                    year = expiry[-4:]
+                    month = expiry[:2] # Get the first two characters
+                    year = expiry[-4:] # Get the last four characters
                     total_amount = float(amount)
                     pk = int(ref)
 

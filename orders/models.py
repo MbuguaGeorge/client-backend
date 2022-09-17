@@ -1,9 +1,7 @@
 from django.db import models
 from user_profile.models import User
 
-#Academic writing options
-
-#Academic writing models
+# Model to hold summary of an order
 
 class Academic_Writing(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)

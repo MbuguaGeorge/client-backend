@@ -1,7 +1,6 @@
 from django.db import models
-from user_profile.models import User
-from orders.models import Academic_Writing
 from django.db.models.signals import post_save
+from orders.models import Academic_Writing
 
 STATUS = [
     ("Recent", "Recent"),
@@ -23,6 +22,7 @@ class Recent_Orders(models.Model):
     def __int__(self):
         return self.id
 
+# Signal to create an order when an instance of Academic_Writing model is created
 def create_order(sender, instance, created, **kwargs):
     if created:
         Recent_Orders.objects.create(details=instance)

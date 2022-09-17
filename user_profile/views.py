@@ -1,4 +1,3 @@
-from functools import partial
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
@@ -33,8 +32,10 @@ def register(request):
             data['phone'] = user.phone
 
             confirmation_Token = user.email_token
+            # create a link that contains a token to validate a user email
             activate_link_url = 'https://georgeclientapp.netlify.app' + '/email-verified/' + confirmation_Token
 
+            # send a mail with the email validation link
             subject='EMAIL CONFIRMATION'
             html_content=render_to_string('user_profile/email.html', {'verify_link': activate_link_url})
             text_content=strip_tags(html_content)
@@ -63,7 +64,8 @@ def validate(request):
             'message': 'Valid',
         }
             
-        if User.objects.filter(email_token=verify_token).exists():
+        if User.objects.filter(email_token=verify_token).exists(): # Verify if the received token checks with the one stored 
+                                                                    # for that partifcular user
             tokenExists = User.objects.get(email_token=verify_token)
 
             tokenExists.is_active = True 
@@ -77,6 +79,7 @@ def validate(request):
                 
         return Response(res) 
 
+# Authenticate a user
 @permission_classes((permissions.AllowAny,))
 class LoginView(APIView):
     def post(self, request):
@@ -92,6 +95,7 @@ class LoginView(APIView):
         else:
             return Response({"error": "Wrong credentials"}, status = status.HTTP_400_BAD_REQUEST)
 
+# Gets current user
 class CurUser(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     lookup_field = 'pk'

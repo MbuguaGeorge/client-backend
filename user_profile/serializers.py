@@ -13,6 +13,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             name = self.validated_data['name'],
             phone = self.validated_data['phone'],
         )
+        # Generate a random token for email validation
         confirmation_Token = default_token_generator.make_token(user)
         password = self.validated_data['password']
 
@@ -20,11 +21,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
-
-class UsersSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('email', 'phone')
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:

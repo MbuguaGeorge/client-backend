@@ -27,6 +27,7 @@ def updatestatus(request, pk):
                     return Response({'message': 'status successfully updated'})
                 return Response({'message': 'data not valid'})
 
+# Pull an order based on its id
 class OrderView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     lookup_field = 'pk'
@@ -39,6 +40,7 @@ class OrderView(generics.ListAPIView):
         res.append(data)
         return Response(res)
 
+# Pull Recent orders
 class RecentOrder(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     lookup_field = 'pk'
@@ -51,6 +53,7 @@ class RecentOrder(generics.ListAPIView):
             res.append(serializer.data)
         return Response(res)
 
+# Pull Canceled orders
 class CanceledOrder(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     lookup_field = 'pk'
@@ -63,6 +66,7 @@ class CanceledOrder(generics.ListAPIView):
             res.append(serializer.data)
         return Response(res)
 
+# Pull Finished orders
 class FinishedOrder(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     lookup_field = 'pk'
