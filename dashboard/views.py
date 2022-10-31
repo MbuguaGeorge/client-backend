@@ -38,7 +38,7 @@ class OrderView(generics.ListAPIView):
         serializer = ListOrdersSerializer(order)
         data = serializer.data
         res.append(data)
-        return Response(res)
+        return Response(res) 
 
 # Pull Recent orders
 class RecentOrder(generics.ListAPIView):
@@ -74,6 +74,19 @@ class FinishedOrder(generics.ListAPIView):
     def get(self, request):
         res = []
         recent_orders = Recent_Orders.objects.filter(details__user=request.user, status='Finished')
+        for order in recent_orders:
+            serializer = ListOrdersSerializer(order)
+            res.append(serializer.data)
+        return Response(res)
+
+# Pull Revised orders
+class RevisedOrder(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'pk'
+
+    def get(self, request):
+        res = []
+        recent_orders = Recent_Orders.objects.filter(details__user=request.user, status='Revised')
         for order in recent_orders:
             serializer = ListOrdersSerializer(order)
             res.append(serializer.data)

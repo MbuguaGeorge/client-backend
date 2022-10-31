@@ -39,6 +39,7 @@ class CreateOrderList(APIView):
                     data['amount'] = order.amount
                     data['discipline'] = order.discipline
                     data['software'] = order.software
+                    data['spacing'] = order.spacing
 
                     serializer1 = SummarySerializer(order)
                     return Response(serializer1.data)

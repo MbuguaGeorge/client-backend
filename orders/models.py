@@ -27,6 +27,7 @@ class Academic_Writing(models.Model):
     task_size = models.CharField(max_length=200, null=True, blank=True)
     software = models.CharField(max_length=200, null=True, blank=True)
     discipline = models.CharField(max_length=200, null=True, blank=True)
+    spacing = models.CharField(max_length=200, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Academic_Writing'

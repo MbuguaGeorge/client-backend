@@ -33,7 +33,7 @@ def register(request):
 
             confirmation_Token = user.email_token
             # create a link that contains a token to validate a user email
-            activate_link_url = 'https://georgeclientapp.netlify.app' + '/email-verified/' + confirmation_Token
+            activate_link_url = 'https://georgeclientapp.netlify.app' + '/verified/' + confirmation_Token
 
             # send a mail with the email validation link
             subject='EMAIL CONFIRMATION'

@@ -4,7 +4,7 @@ from orders.models import Academic_Writing
 class SummarySerializer(serializers.ModelSerializer):
     class Meta:
         model = Academic_Writing
-        fields = ('id', 'order_type', 'academic_year', 'deadline', 'paper_level', 'title', 'upgrade', 'paper_type', 'subject', 'pages', 'charts', 'slides', 'instructions', 'paper_format', 'references', 'programming_category', 'prog_language', 'task_size', 'amount', 'discipline', 'software')
+        fields = ('id', 'order_type', 'academic_year', 'deadline', 'paper_level', 'title', 'upgrade', 'paper_type', 'subject', 'pages', 'charts', 'slides', 'instructions', 'paper_format', 'references', 'programming_category', 'prog_language', 'task_size', 'amount', 'discipline', 'software', 'spacing')
 
     def save(self):
         details = Academic_Writing(

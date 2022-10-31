@@ -5,7 +5,8 @@ from orders.models import Academic_Writing
 STATUS = [
     ("Recent", "Recent"),
     ("Canceled", "Canceled"),
-    ("Finished", "Finished")
+    ("Finished", "Finished"),
+    ("Revised", "Revised")
 ]
 
 class Recent_Orders(models.Model):
