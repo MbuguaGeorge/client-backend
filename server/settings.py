@@ -33,11 +33,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'georgeclientapp.herokuapp.com',
-    '127.0.0.1:8000'
+    '127.0.0.1'
 ]
 
 
@@ -98,7 +98,7 @@ WSGI_APPLICATION = 'server.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'freelance',
+        'NAME': 'client',
         'USER':'postgres',
         'PASSWORD':'George026#',
         'HOST':'127.0.0.1',
@@ -195,7 +195,8 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
-    'https://georgeclientapp.netlify.app'
+    'https://georgeclientapp.netlify.app',
+    'https://clientapp-admin-dashboard.netlify.app'
 ]
 
 django_heroku.settings(locals())

@@ -11,7 +11,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
 
-from user_profile.serializers import ProfileSerializer, ProfileUpdateSerializer
+from user_profile.serializers import ProfileSerializer, UsersSerializer, ProfileUpdateSerializer
 from user_profile.models import User
 
 # Create your views here.
@@ -119,3 +119,12 @@ class UpdateUser(APIView):
             data['success'] = "updated successfully"
             return Response(res)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# pull all users
+class ListUsers(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'pk'
+    serializer_class = UsersSerializer
+
+    def get_queryset(self):
+        return User.objects.all()
