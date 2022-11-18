@@ -14,6 +14,10 @@ from django.core.mail import EmailMultiAlternatives
 from user_profile.serializers import ProfileSerializer, UsersSerializer, ProfileUpdateSerializer
 from user_profile.models import User
 
+from django.dispatch import receiver
+from django.urls import reverse
+from django_rest_passwordreset.signals import reset_password_token_created
+
 # Create your views here.
 @api_view(['POST',])
 @permission_classes((permissions.AllowAny,))
@@ -128,3 +132,23 @@ class ListUsers(generics.ListAPIView):
 
     def get_queryset(self):
         return User.objects.all()
+
+# Password reset
+@receiver(reset_password_token_created)
+@permission_classes((permissions.AllowAny,))
+def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
+
+    user_email = reset_password_token.user.email
+    reset_url = "http://127.0.0.1:3000/password-change/" + reset_password_token.key
+
+    subject='FORGOT PASSWORD'
+    html_content=render_to_string('user_profile/password-reset.html', {'reset_url': reset_url})
+    text_content=strip_tags(html_content)
+    email_from=settings.EMAIL_HOST_USER
+    recepient_list=[user_email,]
+
+    msg=EmailMultiAlternatives(subject,text_content,email_from,recepient_list)
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
+    return Response({'success': 'email changed successfully'})

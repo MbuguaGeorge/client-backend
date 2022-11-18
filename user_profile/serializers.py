@@ -22,6 +22,21 @@ class ProfileSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+class PasswordResetSerializer(serializers.ModelSerializer):
+    email = serializers.SerializerMethodField()
+    class Meta:
+        model = User
+        fields = ('password',)
+
+    def save(self):
+        password = self.validated_data['password']
+        user_email = self.context['email']
+        print(user_email)
+        user = User.objects.get(email=user_email)
+        user.set_password(password)
+        user.save()
+        return user
+
 class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
