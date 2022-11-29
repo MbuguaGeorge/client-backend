@@ -75,5 +75,5 @@ class PaymentProcessView(views.APIView):
                         return Response({
                             'status': 'failed',
                             'message' : 'Invalid card details',
-                            'err-message': err
+                            'err-message': err.error_details
                         })
