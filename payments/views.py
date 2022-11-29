@@ -71,8 +71,9 @@ class PaymentProcessView(views.APIView):
                             'message' : 'Payment sent Successfully',
                             'response': response
                         })
-                    except CheckoutApiException:
+                    except CheckoutApiException as err:
                         return Response({
                             'status': 'failed',
-                            'message' : 'Invalid card details'
+                            'message' : 'Invalid card details',
+                            'err-message': err
                         })
