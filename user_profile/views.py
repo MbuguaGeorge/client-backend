@@ -139,7 +139,7 @@ class ListUsers(generics.ListAPIView):
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
 
     user_email = reset_password_token.user.email
-    reset_url = "http://127.0.0.1:3000/password-change/" + reset_password_token.key
+    reset_url = "https://georgeclientapp.netlify.app/password-change/" + reset_password_token.key
 
     subject='FORGOT PASSWORD'
     html_content=render_to_string('user_profile/password-reset.html', {'reset_url': reset_url})
