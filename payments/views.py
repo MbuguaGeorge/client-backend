@@ -54,8 +54,8 @@ class PaymentProcessView(views.APIView):
                     # Payment details
                     request = PaymentRequest()
                     request.source = request_card_source
-                    request.currency = Currency.USD
                     request.amount = total_amount
+                    request.currency = Currency.USD
                     request.capture = False
                     request.reference = ref
                     request.customer = customer_request
