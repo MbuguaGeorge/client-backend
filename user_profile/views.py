@@ -126,7 +126,7 @@ class UpdateUser(APIView):
 
 # pull all users
 class ListUsers(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     lookup_field = 'pk'
     serializer_class = UsersSerializer
 
